@@ -86,5 +86,8 @@ Due to time constraints, the following things had to be dropped:
 4)	System preload module. There appears no way to convince the Google App Engine to initialize the Python state earlier than first GET request. I am sure that further research will turn something up, but until then, I have made a simple start api (mgchallenge2014.appspot.com/?cmd=start)  that will cause the Python machine to load. Note that there appear to be more than one instance created by the App Engine, it may be necessary to run the start command two or three times to preload them all.
 5) Routes to the locations. A nice feature to have, but time ran out.
 6) IMDB links. As mentioned previously, IMDB's API is not particularly open, and thus the time spent figuring out and spelunking it was not worth the loss of sleep. I would have LOVED to include pictures from the locations on each location (using the Google Map image API).
+7) A template-based HTML generator. A production-quality generator (where one provides html code templates, and it does all
+the formatting) would be ideal. This is not something I would anticipate writing, as there are most certainly plenty of
+templates out there.
 
 
