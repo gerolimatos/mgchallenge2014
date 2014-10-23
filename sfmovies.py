@@ -434,6 +434,9 @@ class MainPage(webapp2.RequestHandler):
     errmsg = None
     for result in resultList :
     #{
+      # Strange...a result without a location. Bad data!
+      if not result.get('locations') :
+        continue
       geoinfo = gmi.geoLookup(result['locations'], False)
       # Prevent needless calculation of strings
       if (ISLEVEL(1))  : INFOPRINT("geoinfo for '%s' = %s"%(result['locations'],str(geoinfo)),1)
