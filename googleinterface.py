@@ -12,8 +12,14 @@
 from BaseImport import *
 from simplecache import *
 import urllib
-import requests
+#import requests
+# This is unreal...there are issues with the Google App Engine and urllib.
+# backing off to urlfetch in the app engine
+from google.appengine.api import urlfetch
 import json
+
+##### OUR GOOGLE API KEY
+GOOGLE_API_KEY="AIzaSyAqQTppBwNoHj1-PAxkBKlpxCKVn20CBq0"
 
 # San Francisco region boxes: these are used to determine if a Google suggestion
 # was at least in the ballpark. It's possible that they would suck given that
@@ -99,8 +105,6 @@ class GoogleMapInterface :
   # ExpiringCaches are threadsafe
   cache = ExpiringCache(864000)
 
-  urlformat = "http://maps.googleapis.com/maps/api/geocode/json?address=%s"
-
   def __init__(self) :
     self.decoder = json.JSONDecoder()
     pass
@@ -132,18 +136,31 @@ class GoogleMapInterface :
     if (retval) :
       return retval
 
-    url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s"%locationString
+    # We have to switch over to the secure/paid version of the API, as I keep running up against my quota
+    url = ("https://maps.googleapis.com/maps/api/geocode/json?address=%s"%locationString) + "&key=" + GOOGLE_API_KEY
     try:
       # It is suggested to wait a little more than multiples of 3 seconds, so
       # as not to conflict with an internal TCP timer
-      response = requests.get(url, timeout=(6.05, 22))
+      # Due to a bug in the Google API engine, URLLib3 does NOT support HTTPS correctly
+      # Thus, back off to using urllib
+      #response = requests.get(url, timeout=(6.05, 22))
+      # code = response.status_code
+      # content = response.content
+      # Urllib2
+      #conn = urllib.urlopen(url)
+      #code = conn.getcode()
+      #content = conn.read()
+      # urlfetch
+      # I am PAYING to use urlfetch, I will use the defualt timeout values that Google has set up: they know best.
+      conn = urlfetch.fetch(url)
+      code = conn.status_code
+      content = conn.content
     except Exception as e:
-      INFOPRINT("Error code %d from url \"%s\""%(response.status_code,url))
       return { 'errmsg' : str(e) }
-    if (response.status_code < 200 or response.status_code >= 300) :
-      INFOPRINT("Error code %d from url \"%s\""%(response.status_code,url))
+    if (code < 200 or code >= 300) :
+      INFOPRINT("Error code %d from url \"%s\""%(code))
       return { 'errmsg' : "GoogleMaps request failed" }
-    dic = self.decoder.decode(response.content)
+    dic = self.decoder.decode(content)
     try:
       resultList = dic['results']
       retval = dict()
