@@ -1,0 +1,22 @@
+# With changes necessary to work with the Google App Engine, 
+# app.yaml became non-trivial. Including it here.
+application: mgchallenge2014
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /.*
+  script: uberweb.application
+
+# This is necessary to make HTTPS urllibs2 and 3 happy with the Google App Engine.
+# Necessary as we use the PAID/secure version of the Google Geocode API now.
+libraries:
+- name: ssl
+  version: latest
+
+# This will allow us to prewarm the site on instance startup, as opposed to
+# first request
+inbound_services:
+- warmup
