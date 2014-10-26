@@ -10,6 +10,7 @@ Facebook.com/mark.gerolimatos
 Gerolimatos.com (currently on load to the PN Gerolymatos coporation…yes, 3rd cousins)
 
 App link: http://mgchallenge2014.appspot.com
+
 git Hub (uhh, you're here already): https://github.com/gerolimatos/mgchallenge2014
 
 
@@ -83,7 +84,7 @@ Due to time constraints, the following things had to be dropped:
 *	The oft-mentioned server-side map generation. Not for development costs as much as support complexity (namely maintaining persistent state). This would also require associated databases.
 *	A “cache cleaner”. While the code is designed at all points to be threadsafe, the simple fact is that the SF Movie database does not change contents all that often. For instance, it has not changed during my development. This made cache invalidation code, no matter how simple (given my design for it) a risky issue: there would be no way to adequately test it in time.
 *	Better UI. Simply put, using a better UI toolkit(s) would make for a better UI. However, the point of this application was to show engineering and design principles and not UI design (as I am not applying for a UI design position). Enough was done to meet the functional requirements, along with a few add-ons (such as being able to click on a marker to). Given enough time, empty-calorie snack foods and coffee, a better UI could of course be designed.
-*	System preload module. There appears no way to convince the Google App Engine to initialize the Python state earlier than first GET request. I am sure that further research will turn something up, but until then, I have made a simple start api (mgchallenge2014.appspot.com/?cmd=start)  that will cause the Python machine to load. Note that there appear to be more than one instance created by the App Engine, it may be necessary to run the start command two or three times to preload them all.
+*	~~System preload module. There appears no way to convince the Google App Engine to initialize the Python state earlier than first GET request. I am sure that further research will turn something up, but until then, I have made a simple start api (mgchallenge2014.appspot.com/?cmd=start)  that will cause the Python machine to load. Note that there appear to be more than one instance created by the App Engine, it may be necessary to run the start command two or three times to preload them all.~~ UPDATE: further research DID find a way to do this via the Google App Engine app.yaml. This has been added
 * Routes to the locations. A nice feature to have, but time ran out.
 * IMDB links. As mentioned previously, IMDB's API is not particularly open, and thus the time spent figuring out and spelunking it was not worth the loss of sleep. I would have LOVED to include pictures from the locations on each location (using the Google Map image API).
 * A template-based HTML generator. A production-quality generator (where one provides html code templates, and it does all
