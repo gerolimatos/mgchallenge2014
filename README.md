@@ -91,4 +91,9 @@ Due to time constraints, the following things had to be dropped:
 the formatting) would be ideal. This is not something I would anticipate writing, as there are most certainly plenty of
 templates out there.
 
-
+__Bugs:__
+The following bugs were found in follow-up testing:
+-Strings with "ticks" (single quotes) were breaking the Javascript code downloaded. Fixed.
+-On empty results in location searches, "error_code" was not getting set, thus causing failure to generate the Map header. Fixed.
+-Ran out of Google Geocoding API calls. Had to switch over to HTTPS/paid form. Required switching to the Google App Engine urlFetch API (as it does not adequately support URLLIB without an info-level messages). Fixed.
+-Despite Python supporting unicode, it seems strangely impossible to convert things like 'é' from Unicode u'\xE9' to the standard '\x82'. Since urllib.encode/quote requires an ASCII string, and since the SFMovies database requires an ASCII encoding, this conversion is necessary. Since there are only a small handful of locations with 'é' in them, instead of risking the functionality of the site, I will instead list this problem here and shake my head that after nearly 20 years, this is still strangely obtuse (seriously: "here's a unicode 'é', give me the extended ASCII for it...why is that SO HARD TO DO? SERIOUSLY!)
